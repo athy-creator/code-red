@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2026 | Ayush</title>
+    <link href="https://fonts.cdnfonts.com/css/minecraft-ia" rel="stylesheet">
+    <style>
+        :root { --st-red: #e11212; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #050505; color: white; 
+            font-family: 'Minecraft', sans-serif; overflow: hidden; 
+        }
+
+        .vhs {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999; background-size: 100% 3px, 3px 100%; pointer-events: none;
+        }
+
+        .screen { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; text-align: center; }
+        .hidden { display: none !important; }
+        
+        .st-btn {
+            background: black; border: 2px solid var(--st-red); color: var(--st-red);
+            padding: 12px 24px; font-family: 'Minecraft', sans-serif; cursor: pointer;
+            box-shadow: 0 0 10px var(--st-red); text-transform: uppercase; margin: 10px;
+        }
+
+        .rocket-img { width: 180px; position: absolute; bottom: 20px; transition: bottom 2s ease-in; }
+
+        /* Robin Section */
+        .robin-container { position: relative; width: 300px; margin-top: 20px; }
+        .robin-img { width: 100%; border: 3px solid white; }
+        .rule-overlay {
+            position: absolute; top: 60%; left: 50%; transform: translate(-50%, -50%);
+            background: white; color: var(--st-red); padding: 5px 10px;
+            font-size: 30px; font-weight: bold; border: 2px solid black;
+        }
+
+        /* Wall Section */
+        #wall-container {
+            position: relative; width: 100vw; height: 100vh;
+            background: url('wall.jpg') no-repeat center center;
+            background-size: contain; background-color: #111;
+        }
+        .light {
+            position: absolute; width: 35px; height: 35px; border-radius: 50%;
+            opacity: 0; filter: blur(12px); transition: opacity 0.2s;
+        }
+
+        .final-credits {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 2000; display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="vhs"></div>
+
+    <div id="phase1" class="screen">
+        <button id="start-btn" class="st-btn">Press Start</button>
+        <h1 id="countdown" class="hidden" style="font-size: 80px; color: var(--st-red);">3</h1>
+        <div id="ny-text" class="hidden">
+            <h1 style="text-shadow: 0 0 20px red; font-size: 3.5rem;">HAPPY NEW YEAR 2026</h1>
+            <p>it's not the end, but the end of beginning</p>
+        </div>
+        <img src="rocket.jpg" id="rocket" class="rocket-img">
+    </div>
+
+    <div id="phase2" class="screen hidden">
+        <div id="tw" style="font-size: 22px; color: #00ff00; max-width: 500px; text-align: left;"></div>
+        <button id="pk-btn" class="st-btn hidden">PICK UP</button>
+    </div>
+
+    <div id="phase3" class="screen hidden">
+        <h2 id="q-text"></h2>
+        <div id="opts"></div>
+        <div id="robin-box" class="hidden">
+            <div class="robin-container">
+                <img src="suck.jpg" class="robin-img">
+                <div id="status-sticker" class="rule-overlay"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="phase4" class="screen hidden">
+        <div style="max-width: 550px; background: rgba(0,0,0,0.9); padding: 30px; border: 2px solid var(--st-red); text-align: left;">
+            <p id="l-text"></p>
+        </div>
+        <button id="go-wall" class="st-btn hidden" style="margin-top:20px;">I LOVE YOU</button>
+    </div>
+
+    <div id="phase5" class="hidden">
+        <div id="wall-container"></div>
+        <div id="final-credits" class="final-credits hidden">
+            <h2 style="color:var(--st-red);">CHAPTER ONE</h2>
+            <h1 style="font-size: 4rem;">THE NEW YEAR</h1>
+            <p style="padding: 0 40px;">“Something is coming... something hungry for more adventures with you.”</p>
+            <h2 style="color:var(--st-red); margin-top: 30px;">2026: TO BE CONTINUED</h2>
+        </div>
+    </div>
+
+    <script>
+        const trivia = [
+            { q: "What's my favourite colour?", a: "Blue", o: ["Red", "Blue", "Yellow"] },
+            { q: "What is Eleven’s favorite food?", a: "Eggo Waffles", o: ["Eggo Waffles", "Pizza"] },
+            { q: "When did we start dating?", a: "18th of Dec", o: ["10th", "18th of Dec"] },
+            { q: "My favourite flowers?", a: "Lilies", o: ["Lilies", "Roses"] },
+            { q: "Will you be with me forever?", a: "Yes", o: ["Yes", "Yes"] }
+        ];
+        let cur = 0;
+
+        document.getElementById('start-btn').onclick = function() {
+            this.style.display = 'none';
+            let cd = document.getElementById('countdown');
+            cd.classList.remove('hidden');
+            let c = 3;
+            let t = setInterval(() => {
+                cd.innerText = c;
+                if(c === 0) { clearInterval(t); launch(); }
+                c--;
+            }, 1000);
+        };
+
+        function launch() {
+            document.getElementById('countdown').style.display = 'none';
+            document.getElementById('rocket').style.bottom = '120%';
+            setTimeout(() => {
+                document.getElementById('ny-text').classList.remove('hidden');
+                setTimeout(showPhase2, 3500);
+            }, 1800);
+        }
+
+        function showPhase2() {
+            document.getElementById('phase1').classList.add('hidden');
+            document.getElementById('phase2').classList.remove('hidden');
+            let m = "…Can you hear me?\n\nBefore this year moves too fast,\nthere’s something I wanted to say.\n\nbzzt... Ayush, are you there?";
+            let i = 0;
+            function type() {
+                if(i < m.length) {
+                    document.getElementById('tw').innerHTML += m[i] === "\n" ? "<br>" : m[i];
+                    i++; setTimeout(type, 50);
+                } else document.getElementById('pk-btn').classList.remove('hidden');
+            }
+            type();
+        }
+
+        document.getElementById('pk-btn').onclick = () => {
+            document.getElementById('phase2').classList.add('hidden');
+            document.getElementById('phase3').classList.remove('hidden');
+            loadT();
+        };
+
+        function loadT() {
+            let d = trivia[cur];
+            document.getElementById('q-text').innerText = d.q;
+            document.getElementById('opts').innerHTML = "";
+            document.getElementById('robin-box').classList.add('hidden');
+            d.o.forEach(opt => {
+                let b = document.createElement('button');
+                b.className = "st-btn"; b.innerText = opt;
+                b.onclick = () => {
+                    let win = opt === d.a;
+                    document.getElementById('robin-box').classList.remove('hidden');
+                    let sticker = document.getElementById('status-sticker');
+                    sticker.innerText = win ? "YOU RULE" : "YOU SUCK";
+                    sticker.style.color = win ? "blue" : "red";
+                    if(win) {
+                        cur++;
+                        setTimeout(() => cur < trivia.length ? loadT() : showL(), 2000);
+                    }
+                };
+                document.getElementById('opts').appendChild(b);
+            });
+        }
+
+        function showL() {
+            document.getElementById('phase3').classList.add('hidden');
+            document.getElementById('phase4').classList.remove('hidden');
+            document.getElementById('l-text').innerHTML = "Hey Dumbo,<br><br>I know we didn’t start this year together but I want to end it together and all the upcoming years... We still have so many things left to experience. Harry Potter marathons, cuddling, and that perfect date...<br><br>Friends don't lie. I'm never letting you go. <br><br>I love you, always.";
+            setTimeout(() => document.getElementById('go-wall').classList.remove('hidden'), 4000);
+        }
+
+        document.getElementById('go-wall').onclick = () => {
+            document.getElementById('phase4').classList.add('hidden');
+            document.getElementById('phase5').classList.remove('hidden');
+            runWall();
+        };
+
+        function runWall() {
+            const container = document.getElementById('wall-container');
+            const seq = [
+                { t: '43%', l: '6%', c: 'green' }, { t: '43%', l: '36%', c: 'red' }, 
+                { t: '43%', l: '66%', c: 'blue' }, { t: '72%', l: '43%', c: 'yellow' }, 
+                { t: '15%', l: '54%', c: 'white' }, { t: '72%', l: '66%', c: 'red' }, 
+                { t: '43%', l: '66%', c: 'blue' }, { t: '72%', l: '30%', c: 'white' }
+            ];
+
+            seq.forEach((item, idx) => {
+                let lit = document.createElement('div');
+                lit.className = 'light';
+                lit.style.top = item.t; lit.style.left = item.l;
+                lit.style.backgroundColor = item.c;
+                lit.style.boxShadow = `0 0 40px 20px ${item.c}`;
+                container.appendChild(lit);
+                setTimeout(() => {
+                    lit.style.opacity = "1";
+                    setTimeout(() => lit.style.opacity = "0", 800);
+                }, idx * 1100);
+            });
+
+            setTimeout(() => document.getElementById('final-credits').classList.remove('hidden'), 10000);
+        }
+    </script>
+</body>
+</html>
